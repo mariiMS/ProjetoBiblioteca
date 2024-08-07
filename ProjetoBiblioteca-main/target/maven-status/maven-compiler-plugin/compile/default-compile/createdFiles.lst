@@ -1,0 +1,4 @@
+com\biblioteca\model\Cliente.class
+com\biblioteca\controller\ClienteController.class
+com\biblioteca\repository\ClienteRepository.class
+com\biblioteca\BibliotecaApplication.class
