@@ -1,8 +1,8 @@
 package com.biblioteca.controller;
 
-import com.biblioteca.response.ApiResponse;
 import com.biblioteca.model.Livro;
 import com.biblioteca.repository.LivroRepository;
+import com.biblioteca.response.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,28 +49,31 @@ public class LivroController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> atualizarLivro(@PathVariable Long id, @Valid @RequestBody Livro livro) {
-        return livroRepository.findById(id)
-                .map(livroExistente -> {
-                    livroExistente.setTitulo(livro.getTitulo());
-                    livroExistente.setAutor(livro.getAutor());
-                    livroExistente.setAnoPublicacao(livro.getAnoPublicacao());
-                    livroExistente.setGenero(livro.getGenero());
-                    livroExistente.setPreco(livro.getPreco());
-                    Livro livroAtualizado = livroRepository.save(livroExistente);
-                    return ResponseEntity.ok(new ApiResponse("Livro atualizado com sucesso", livroAtualizado));
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse("Livro não encontrado", null)));
+        Optional<Livro> livroExistenteOpt = livroRepository.findById(id);
+        if (livroExistenteOpt.isPresent()) {
+            Livro livroExistente = livroExistenteOpt.get();
+            livroExistente.setTitulo(livro.getTitulo());
+            livroExistente.setAutor(livro.getAutor());
+            livroExistente.setAno(livro.getAno());  // Supondo que você use o campo 'ano' em vez de 'anoPublicacao'
+            livroExistente.setGenero(livro.getGenero());
+            livroExistente.setPreco(livro.getPreco());
+            Livro livroAtualizado = livroRepository.save(livroExistente);
+            return ResponseEntity.ok(new ApiResponse("Livro atualizado com sucesso", livroAtualizado));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse("Livro não encontrado", null));
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletarLivro(@PathVariable Long id) {
-        return livroRepository.findById(id)
-                .map(livroExistente -> {
-                    livroRepository.delete(livroExistente);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse("Livro não encontrado", null)));
+        Optional<Livro> livroExistenteOpt = livroRepository.findById(id);
+        if (livroExistenteOpt.isPresent()) {
+            livroRepository.delete(id);  // Passa o ID diretamente ao método delete
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse("Livro não encontrado", null));
+        }
     }
 }

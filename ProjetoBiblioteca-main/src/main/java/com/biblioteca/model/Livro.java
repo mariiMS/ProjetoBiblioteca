@@ -1,44 +1,28 @@
 package com.biblioteca.model;
 
-import jakarta.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity
 public class Livro {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    @Column(nullable = false)
     @NotNull
     @Size(min = 1, max = 100)
     private String titulo;
 
-    @Column(nullable = false)
     @NotNull
     @Size(min = 1, max = 100)
     private String autor;
 
-    @Column(nullable = false)
     @NotNull
-    private Integer anoPublicacao;
+    private Integer ano;
 
-    @Column(nullable = false)
     @NotNull
     private Double preco;
 
-    public Double getGenero() {
-        return genero;
-    }
-
-    public void setGenero(Double genero) {
-        this.genero = genero;
-    }
-
-    @Column(nullable = false)
     @NotNull
-    private Double genero;
+    private String genero;  // Alterado para String, pois normalmente o gênero é representado como texto
 
     // Getters e Setters
     public Long getId() {
@@ -65,12 +49,12 @@ public class Livro {
         this.autor = autor;
     }
 
-    public Integer getAnoPublicacao() {
-        return anoPublicacao;
+    public Integer getAno() {
+        return ano;
     }
 
-    public void setAnoPublicacao(Integer anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
+    public void setAno(Integer ano) {
+        this.ano = ano;
     }
 
     public Double getPreco() {
@@ -81,4 +65,11 @@ public class Livro {
         this.preco = preco;
     }
 
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 }

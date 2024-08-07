@@ -1,39 +1,55 @@
 package com.biblioteca.model;
 
-import jakarta.persistence.*;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Entity
 public class Cliente {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@NotNull
+	@Size(min = 1, max = 100)
 	private String nome;
 
-	@Column(nullable = false, unique = true)
+	@NotNull
+	@Size(min = 1, max = 100)
 	private String email;
 
-	@Column(nullable = false)
+	@NotNull
+	@Size(min = 1, max = 15)
 	private String telefone;
 
-	@Column(nullable = false)
+	@NotNull
+	@Size(min = 11, max = 11)  // Tamanho típico do CPF (11 dígitos)
 	private String cpf;
 
-	@Column(nullable = false)
+	@NotNull
+	@Size(min = 9, max = 9)  // Tamanho típico do RG (9 dígitos)
 	private String rg;
 
-
-	@Temporal(TemporalType.DATE)
-	@Column(nullable = false)
+	@NotNull
 	private Date dataNascimento;
+	private boolean maiorDeIdade;
 
-	@Column(nullable = false)
+
+	public boolean isMaiorDeIdade() {
+		// Assume que maior de idade é a partir de 18 anos
+		// Lógica simples para verificar maioridade
+		long idade = new Date().getYear() - dataNascimento.getYear();
+		return idade >= 18;
+	}
+
+	public void setMaiorDeIdade(boolean maiorDeIdade) {
+		this.maiorDeIdade = maiorDeIdade;
+	}
+
+
+	@NotNull
+	@Size(min = 8, max = 8)  // Tamanho típico do CEP (8 dígitos)
 	private String cep;
 
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -97,7 +113,4 @@ public class Cliente {
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
-
-
 }
-
